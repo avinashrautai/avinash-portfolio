@@ -9,6 +9,11 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getSiteSettings } from "@/lib/content";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: { default: "Avinash Raut — Designer, developer, writer", template: "%s — Avinash Raut" },
   description: "A maker's field notes on people, technology, and life — and the products, visual work, and writing that follow.",
