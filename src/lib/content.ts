@@ -1,10 +1,10 @@
 import { cache } from "react";
 import { seedProjects, seedSettings } from "@/lib/seed";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Article, Project, SiteSettings } from "@/types/content";
 
 export const getProjects = cache(async (includeDrafts = false): Promise<Project[]> => {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   if (supabase) {
     const { data, error } = await supabase.from("projects").select("*").order("sort_order");
     if (!error && data) return (data as Project[]).filter((p) => includeDrafts || p.published);
@@ -17,7 +17,7 @@ export const getProject = cache(async (slug: string): Promise<Project | null> =>
 
 export const getArticles = cache(async (includeDrafts = false): Promise<Article[]> => {
   const withdrawnSeedSlugs = new Set(["making-room-for-the-useful", "systems-are-made-of-people"]);
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   if (supabase) {
     const { data, error } = await supabase.from("articles").select("*").order("published_at", { ascending: false });
     if (!error && data) return (data as Article[]).filter((a) => includeDrafts || (a.published && !withdrawnSeedSlugs.has(a.slug)));
@@ -29,7 +29,7 @@ export const getArticle = cache(async (slug: string): Promise<Article | null> =>
   (await getArticles()).find((a) => a.slug === slug) ?? null);
 
 export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   if (supabase) {
     const { data, error } = await supabase.from("site_settings").select("key,value");
     if (!error && data?.length) {
