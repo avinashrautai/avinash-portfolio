@@ -9,9 +9,12 @@ export async function requireAdmin() {
   if (!hasSupabaseConfig()) redirect("/admin/setup");
   const supabase = await createClient();
   if (!supabase) redirect("/admin/setup");
+
   const { data: { user } } = await supabase.auth.getUser();
-  const admins = (process.env.ADMIN_USER_IDS || "").split(",").map((id) => id.trim()).filter(Boolean);
   if (!user) redirect("/admin/login");
-  if (!admins.includes(user.id)) redirect("/admin/unauthorized");
+
+  const { data: isAdmin, error } = await supabase.rpc("is_portfolio_admin");
+  if (error || !isAdmin) redirect("/admin/unauthorized");
+
   return { supabase, user };
 }
