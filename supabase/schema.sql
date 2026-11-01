@@ -36,6 +36,7 @@ create table if not exists public.projects (
   image_url text,
   published boolean not null default false,
   sort_order integer not null default 0,
+  direction text not null default 'View project',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
