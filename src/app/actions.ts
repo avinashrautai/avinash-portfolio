@@ -6,6 +6,11 @@ import { requireAdmin } from "@/lib/admin";
 
 const value = (form: FormData, name: string) => String(form.get(name) || "").trim();
 const checkbox = (form: FormData, name: string) => form.get(name) === "on";
+const slugify = (input: string) => input
+  .toLowerCase()
+  .trim()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-+|-+$/g, "");
 function actionFailure(message: string): never {
   redirect(`/admin?error=${encodeURIComponent(message)}`);
 }
@@ -67,8 +72,11 @@ export async function deleteProject(form: FormData) {
 export async function saveArticle(form: FormData) {
   const { supabase } = await requireAdmin();
   const id = value(form, "id");
+  const title = value(form, "title");
+  const slug = slugify(value(form, "slug") || title);
+  if (!title || !slug) actionFailure("Add a title so the entry can be saved.");
   const row = {
-    slug: value(form, "slug"), title: value(form, "title"), dek: value(form, "dek"),
+    slug, title, dek: value(form, "dek"),
     body: value(form, "body"), category: value(form, "category"),
     published_at: value(form, "published_at") || new Date().toISOString().slice(0, 10),
     published: checkbox(form, "published"),
