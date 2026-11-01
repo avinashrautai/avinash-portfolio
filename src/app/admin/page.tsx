@@ -22,7 +22,7 @@ function ProjectFields({ project }: { project?: Project }) {
   </div>;
 }
 
-function ArticleFields({ article }: { article?: Article }) {
+export function ArticleFields({ article }: { article?: Article }) {
   return <div className="admin-form">
     <input type="hidden" name="id" value={article?.id || ""} />
     <label>Title<input name="title" defaultValue={article?.title} required /></label>
@@ -45,7 +45,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     {error && <p className="status-message" role="alert">{error}</p>}
     <nav className="admin-nav" aria-label="Admin sections"><a href="#projects">Projects</a><a href="#writing">Writing</a><a href="#settings">Site settings</a><Link href="/">View site ↗</Link></nav>
     <section className="admin-section" id="projects"><h2>Projects <span className="section-aside">{projects.length} records</span></h2><details className="admin-item"><summary><span>Add a project</span><span className="row-status">New record</span></summary><form action={saveProject}><ProjectFields /></form></details>{projects.map((project) => <details className="admin-item" key={project.id}><summary><span>{project.title}</span><span className="row-status">{project.published ? "Published" : "Draft"} · {project.status}</span></summary><form action={saveProject}><ProjectFields project={project} /></form></details>)}</section>
-    <section className="admin-section" id="writing"><h2>Writing <span className="section-aside">{articles.length} records</span></h2><details className="admin-item"><summary><span>Add a writing entry</span><span className="row-status">New record</span></summary><form action={saveArticle}><ArticleFields /></form></details>{articles.map((article) => <details className="admin-item" key={article.id}><summary><span>{article.title}</span><span className="row-status">{article.published ? "Published" : "Draft"}</span></summary><form action={saveArticle}><ArticleFields article={article} /></form></details>)}</section>
+    <section className="admin-section" id="writing"><div className="admin-section-head"><h2>Writing <span className="section-aside">{articles.length} records</span></h2><Link className="admin-new-link" href="/admin/writing/new">New writing <span>↗</span></Link></div>{articles.length === 0 ? <p className="admin-empty">No entries yet. Start with one small note.</p> : articles.map((article) => <details className="admin-item" key={article.id}><summary><span>{article.title}</span><span className="row-status">{article.published ? "Published" : "Draft"}</span></summary><form action={saveArticle}><ArticleFields article={article} /></form></details>)}</section>
     <section className="admin-section" id="settings"><h2>Site settings</h2><p className="admin-note">These settings are saved to Supabase and used across the public site.</p><form action={saveSettings} className="admin-form"><label>Contact email<input name="contact_email" type="email" defaultValue={settings.contact_email} /></label><label>Location<input name="location" defaultValue={settings.location} /></label><label>Availability<input name="availability" defaultValue={settings.availability} /></label><label className="wide">About introduction<textarea name="about_intro" defaultValue={settings.about_intro} /></label><div className="button-row wide"><button className="quiet-button" type="submit">Save settings ↗</button></div></form></section>
   </div>;
 }
