@@ -5,6 +5,7 @@ import "@fontsource/instrument-sans/600.css";
 import "@fontsource/mukta/400.css";
 import "@fontsource/mukta/500.css";
 import "./globals.css";
+import "./overrides.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getSiteSettings } from "@/lib/content";
