@@ -1,0 +1,13 @@
+/* Final presentation pass: quieter navigation, not a boxed menu. */
+.site-header { padding-top: 22px; }
+.main-nav { width: auto; display: inline-flex; gap: 28px; margin-top: 13px; padding: 0; border: 0; }
+.main-nav a { font-size: 12px; }
+.hero-links { gap: 22px; }
+.text-link { gap: 0; }
+
+@media (max-width: 700px) {
+  .site-header { padding-top: 18px; }
+  .main-nav { display: flex; width: 100%; justify-content: flex-start; gap: 26px; margin-top: 16px; overflow-x: auto; padding-bottom: 4px; }
+  .main-nav a { flex: 0 0 auto; font-size: 12px; }
+  .theme-toggle { padding-top: 0; }
+}
